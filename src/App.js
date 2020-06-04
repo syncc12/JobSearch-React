@@ -1,26 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Layout from './components/Layout';
+import Listings from './components/Listings';
+import Home from './components/Home';
+import Jobs from './components/Jobs';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      showHome: true,
+      showListings: false,
+      showJobs: false
+    };
+  }
+
+  onNavLinkClicked = (linkName) => {
+    if (linkName === 'home') {
+      this.setState({showListings: false});
+      this.setState({showJobs: false});
+      this.setState({showHome: !this.state.showHome});
+    } else if (linkName === 'listings') {
+      this.setState({showHome: false});
+      this.setState({showListings: !this.state.showListings});
+    } else if (linkName === 'jobs') {
+      this.setState({showHome: false});
+      this.setState({showJobs: !this.state.showJobs});
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Layout onNavLinkClicked={this.onNavLinkClicked} />
+        <br/>
+        {this.state.showHome ? <Home /> : ''}
+        {this.state.showListings ? <Listings /> : ''}
+        {this.state.showJobs ? <Jobs /> : ''}
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -1,0 +1,27 @@
+@import "~bootstrap/scss/bootstrap";
+
+$box-color: #393939;
+.shadow-box {
+  // display: table;
+  border: 1px solid $box-color;
+  border-radius: 10px;
+  background: white;
+  padding: 10px;
+  margin: 5px;
+  -moz-box-shadow: -3px 3px 5px -3px $box-color;
+  -webkit-box-shadow: -3px 3px 5px -3px $box-color;
+  box-shadow: -3px 3px 5px -3px $box-color;
+}
+
+.data-table {
+  margin: 5px;
+  width: 95vw;
+}
+
+.data-table tbody tr {
+  border-top: 1px solid black;
+}
+
+.data-table td, .data-table th {
+  padding: 5px;
+}
