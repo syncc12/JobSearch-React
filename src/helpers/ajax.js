@@ -3,7 +3,7 @@ const ajaxPath = (endpoint) => {
     console.log('endpoint','http://localhost:8080/');
     return 'http://localhost:8080/' + endpoint;
   } else {
-    console.log('endpoint','https://jobsearch-react-api.herokuapp.com/');
+    // console.log('endpoint','https://jobsearch-react-api.herokuapp.com/');
     return 'https://jobsearch-react-api.herokuapp.com/' + endpoint;
   }
     
