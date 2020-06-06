@@ -13,15 +13,7 @@ $box-color: #393939;
   box-shadow: -3px 3px 5px -3px $box-color;
 }
 
-.data-table {
-  margin: 5px;
-  width: 95vw;
-}
-
-.data-table tbody tr {
-  border-top: 1px solid black;
-}
-
-.data-table td, .data-table th {
-  padding: 5px;
+.custom-modal-size {
+  width: 90%;
+  max-width: none !important;
 }

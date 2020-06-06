@@ -1,19 +1,43 @@
 import React from 'react';
 import axios from 'axios';
 import ajaxPath from '../helpers/ajax';
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 class Forms extends React.Component {
 
-  postRecord = (postEndpoint, postJSON) => {
-    console.log(JSON.parse(postJSON));
-    axios.post(ajaxPath(postEndpoint), JSON.parse(postJSON))
+  constructor() {
+    super();
+    this.state = {
+      value: {}
+    };
+    this.getValues = this.getValues.bind(this);
+  }
+
+  initialState = () => {
+    let outJSON = {};
+    this.props.inputArr.map((input,index) => {
+      return outJSON[input[1]] = '';
+    });
+    this.setState({value: outJSON})
+  }
+
+  getValues = (event) => {
+    const thisColName = document.getElementById(event.target.id).dataset.columnname;
+    this.setState({value: {
+      ...this.state.value,
+      [thisColName]: event.target.value
+      }
+    });
+  }
+
+  postRecord = (postEndpoint, postJSON, e) => {
+    axios.post(ajaxPath(postEndpoint), postJSON)
     .then((res) => '')
     .catch((err) => console.log(err.response.data));
+    e.preventDefault();
   }
 
   arrExclude = (inArr, exclude=[]) => {
@@ -24,19 +48,42 @@ class Forms extends React.Component {
     return outArr;
   }
 
+  tally = (outerIndex,innerIndex) => {
+    return (outerIndex * 2) + innerIndex;
+  }
+
+  componentDidMount() {
+    this.initialState();
+  }
+
   render() {
 
-    const { endpoint, inputArr } = this.props;
-    const postJSON = '{"title": "Test", "job_type": "Test", "company": "Test", "address": "Test", "phone_number": "Test", "email": "Test", "website_url": "Test", "job_description": "Test", "application_status": false, "consideration_status": true}';
+    const { endpoint, inputArr, inputPattern } = this.props;
 
     return (
       <Row>
         <Col lg={5}>
           <div className="shadow-box">
-            <Form>
-              {inputArr.map((input,index) => <Form.Control key={index} placeholder={input[0]} type="text" data-columnname={input[1]} />)}
+            <Form onSubmit={(e) => this.postRecord(endpoint, this.state.value, e)}>
+              {
+                inputPattern.map((patternGroup,outerIndex) => {
+                  return (
+                    <Form.Row key={outerIndex}>{
+                      patternGroup.map((pattern,innerIndex) => {
+                        const thisTally = this.tally(outerIndex,innerIndex);
+                        return (
+                          <Col key={thisTally} lg={pattern}>
+                            <Form.Control id={`${endpoint}-form_control-${inputArr[thisTally][1]}`} key={thisTally} placeholder={inputArr[thisTally][0]} type="text" as={inputArr[thisTally][2]} data-columnname={inputArr[thisTally][1]} onChange={this.getValues} value={this.state.value[inputArr[thisTally][1]] || ''} />
+                          </Col>
+                        );
+                      })
+                    }</Form.Row>
+                  )
+                })
+              }
+
               <br/>
-              <Button variant="primary" type="submit" onClick={() => this.postRecord(endpoint, postJSON)}>
+              <Button variant="primary" type="submit">
                 Submit
               </Button>
             </Form>
@@ -48,4 +95,3 @@ class Forms extends React.Component {
 }
 
 export default Forms;
-

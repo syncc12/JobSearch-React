@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import ajaxPath from '../helpers/ajax';
-import Tables from './Tables'
-import Forms from './Forms'
+import Tables from './Tables';
+import Forms from './Forms';
 
 class Jobs extends React.Component {
 
@@ -24,16 +24,16 @@ class Jobs extends React.Component {
   }
 
   render() {
-    const inputArr = [['Number','id'],['Title','title'],['Job Type','job_type'],['Company','company'],['Address','address'],['Phone Number','phone_number'],['Email Address','email'],['Website URL','website_url'],['Job Description','job_description'],['Applied','application_status'],['Open','consideration_status']];
-    const headers = ['#', 'Title', 'Job Type', 'Company', 'Address', 'Phone Number', 'Email Address', 'Website URL', 'Job Description', 'Applied', 'Open'];
+    const inputArr = [['Title','title','input'],['Job Type','job_type','input'],['Company','company','input'],['Address','address','input'],['Phone Number','phone_number','input'],['Email Address','email','input'],['Website URL','website_url','input'],['Job Description','job_description','textarea']];
+    const inputPattern = [['6','6'],['6','6'],['6','6'],['6','6']];
+    const headers = ['#', 'Applied', 'Open', 'Title', 'Job Type', 'Company', 'Address', 'Phone Number', 'Email Address', 'Website URL', 'Job Description'];
 
     return (
       <div>
-        <Forms endpoint={'jobs'} inputArr={inputArr}/>
+        <Forms endpoint={'jobs'} inputArr={inputArr} inputPattern={inputPattern} />
         <div>
-          <Tables headers={headers} dataJSON={this.state.jobData} />
+          <Tables headers={headers} dataJSON={this.state.jobData} inputArr={inputArr} />
         </div>
-          
       </div>
     );
   }

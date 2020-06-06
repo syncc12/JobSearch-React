@@ -1,4 +1,7 @@
 import React from 'react';
+import Table from 'react-bootstrap/Table';
+import Shows from './Shows';
+import TableRows from './TableRows';
 
 class Tables extends React.Component {
 
@@ -9,31 +12,39 @@ class Tables extends React.Component {
     };
   }
 
-  decompileJSON = (inJSON, exclude=[]) => {
+  decompileJSON = (inJSON, exclude=[], includeButton=false) => {
     let outArr = [];
     for (var i of Object.entries(inJSON)) {
       if (!exclude.includes(i[0])) outArr.push([i[0],i[1]]);
     }
+    if (includeButton === true) {
+      outArr.push(['',<Shows />])
+    }
     return outArr;
   }
 
+  orderTDs = (inHeaders, inDataJSON) => {
+
+  }
+
   render() {
-    const { headers, dataJSON } = this.props
+    const { headers, dataJSON, inputArr } = this.props
 
     return (
       <div className="shadow-box">
-        <table className="data-table">
+        <Table hover responsive>
           <thead>
             <tr>
-              {headers.map((header,index) => <th key={index} className='data-table-tr'>{header}</th>)}
+              {headers.map((header,index) => <th key={index}>{header}</th>)}
             </tr>
           </thead>
-          <tbody>
-            {dataJSON.map((row,index) => <tr key={`row-${index}`} id={`data-table-tr-${index}`} className='data-table-tr'>
-              {this.decompileJSON(row,['created_at','updated_at']).map((data,index) => <td key={`td-${index}`}>{data[1]}</td>)}
+          <TableRows headers={headers} data={dataJSON} inputArr={inputArr}/>
+          {/*<tbody>
+            {dataJSON.map((row,index) => <tr key={`row-${index}`} id={`data-table-tr-${index}`}>
+              {this.decompileJSON(row,['created_at','updated_at'],true).map((data,index) => <td key={`td-${index}`}>{data[1]}</td>)}
               </tr>)}
-          </tbody>
-        </table>
+          </tbody>*/}
+        </Table>
       </div>
     );
   }

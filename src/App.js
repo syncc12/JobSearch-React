@@ -4,6 +4,8 @@ import Layout from './components/Layout';
 import Listings from './components/Listings';
 import Home from './components/Home';
 import Jobs from './components/Jobs';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 class App extends React.Component {
 
@@ -16,17 +18,28 @@ class App extends React.Component {
     };
   }
 
+  widthLogic = () => {
+    const smallWidth = [[5,1],[5,0]];
+    const bigWidth = [[10,1],[10,1]];
+    const { showListings, showJobs } = this.state;
+    if (showListings === true && showJobs === true) {
+      return smallWidth;
+    } else {
+      return bigWidth;
+    }
+  }
+
   onNavLinkClicked = (linkName) => {
     if (linkName === 'home') {
-      this.setState({showListings: false});
-      this.setState({showJobs: false});
-      this.setState({showHome: !this.state.showHome});
+      this.setState(() => {return {showListings: false}});
+      this.setState(() => {return {showJobs: false}});
+      this.setState(() => {return {showHome: !this.state.showHome}});
     } else if (linkName === 'listings') {
-      this.setState({showHome: false});
-      this.setState({showListings: !this.state.showListings});
+      this.setState(() => {return {showHome: false}});
+      this.setState(() => {return {showListings: !this.state.showListings}});
     } else if (linkName === 'jobs') {
-      this.setState({showHome: false});
-      this.setState({showJobs: !this.state.showJobs});
+      this.setState(() => {return {showHome: false}});
+      this.setState(() => {return {showJobs: !this.state.showJobs}});
     }
   }
 
@@ -35,10 +48,12 @@ class App extends React.Component {
       <div className="App">
         <Layout onNavLinkClicked={this.onNavLinkClicked} />
         <br/>
-        {this.state.showHome ? <Home /> : ''}
-        {this.state.showListings ? <Listings /> : ''}
-        {this.state.showJobs ? <Jobs /> : ''}
-      </div>
+        <Row>
+          {this.state.showHome ? <Col lg={{ span: 10, offset: 1 }}><Home /></Col> : ''}
+          {this.state.showListings ? <Col lg={{ span: this.widthLogic()[0][0], offset: this.widthLogic()[0][1] }}><Listings /></Col> : ''}
+          {this.state.showJobs ? <Col lg={{ span: this.widthLogic()[1][0], offset: this.widthLogic()[1][1] }}><Jobs width={this.widthLogic()} /></Col> : ''}
+        </Row>
+    </div>
     );
   }
 }
