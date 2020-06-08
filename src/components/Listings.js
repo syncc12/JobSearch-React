@@ -9,7 +9,20 @@ class Listings extends React.Component {
   constructor() {
     super();
     this.state = {
-      listingData: []
+      listingData: [],
+      headers: [
+        ['#','id'],
+        ['Transfer', 'transferred'],
+        ['Applied','application_status'],
+        ['Open','consideration_status'],
+        ['Title','title'],
+        ['Job Type','job_type'],
+        ['Company','company'],
+        ['Address','address'],
+        ['Phone Number','phone_number'],
+        ['Email Address','email'],
+        ['Website URL','website_url']
+      ]
     };
   }
 
@@ -19,20 +32,24 @@ class Listings extends React.Component {
     .catch((err) => console.log(err));
   }
 
+  addData = () => {
+    this.getListings();
+  }
+
   componentDidMount() {
     this.getListings();
   }
-  
+
   render() {
-    const inputArr = [['Title','title','input'],['Job Type','job_type','input'],['Company','company','input'],['Address','address','input'],['Phone Number','phone_number','input'],['Email Address','email','input'],['Website URL','website_url','input'],['Job Description','job_description','textarea']];
+    const inputArr = [['Title','title','input'],['Company','company','input'],['Job Type','job_type','input'],['Address','address','input'],['Phone Number','phone_number','input'],['Email Address','email','input'],['Website URL','website_url','input'],['Job Description','job_description','textarea']];
     const inputPattern = [['6','6'],['6','6'],['6','6'],['6','6']];
-    const headers = ['#', 'Applied', 'Open', 'Title', 'Job Type', 'Company', 'Address', 'Phone Number', 'Email Address', 'Website URL', 'Job Description'];
+    const { listingData, headers } = this.state
 
     return (
       <div>
-        <Forms endpoint={'listings'} inputArr={inputArr} inputPattern={inputPattern} />
+        <Forms endpoint={'listings'} inputArr={inputArr} inputPattern={inputPattern} addData={this.addData} />
         <div>
-          <Tables headers={headers} dataJSON={this.state.listingData} inputArr={inputArr} />
+          <Tables headers={headers} dataJSON={listingData} addData={this.addData} currentTable="listings" />
         </div>
       </div>
     );

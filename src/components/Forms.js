@@ -16,6 +16,15 @@ class Forms extends React.Component {
     this.getValues = this.getValues.bind(this);
   }
 
+  uniqueIdGenerator = (inPostJSON) => {
+    let postArr = [];
+    let uniqueID = 0;
+    Object.entries(inPostJSON).map((postEntry,index) => postArr.push([postEntry[0],postEntry[1]]));
+    const postStr = postArr.flat().join('');
+    postStr.split('').map((cStr,index) => uniqueID += cStr.charCodeAt(0));
+    return uniqueID;
+  }
+
   initialState = () => {
     let outJSON = {};
     this.props.inputArr.map((input,index) => {
@@ -34,8 +43,12 @@ class Forms extends React.Component {
   }
 
   postRecord = (postEndpoint, postJSON, e) => {
+    this.uniqueIdGenerator(postJSON);
     axios.post(ajaxPath(postEndpoint), postJSON)
-    .then((res) => '')
+    .then((res) => {
+      this.props.addData();
+      this.initialState();
+    })
     .catch((err) => console.log(err.response.data));
     e.preventDefault();
   }
